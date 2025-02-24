@@ -2,8 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const mainSlice = createSlice({
     name: "main",
-    initialState: {},
-    reducers: {},
+    initialState: {
+        isMapInitialized: false,
+    },
+    reducers: {
+        setIsMapInitialized: (state, action) => {
+            state.isMapInitialized = action.payload;
+        },
+    },
 });
 
 export default mainSlice;
