@@ -20,13 +20,12 @@ export const useInitMap = () => {
         });
 
         map.on("style.load", () => {
-            map.setProjection({
-                type: "globe",
-            });
+            map.setProjection({ type: "globe" });
         });
 
-        // Set map as initialized
-        dispatch(mainSlice.actions.setIsMapInitialized(true));
+        map.on("load", () => {
+            dispatch(mainSlice.actions.setIsMapInitialized(true));
+        });
 
         // Clean up
         return () => {
@@ -63,6 +62,25 @@ const useCreateMapUtilityFunction = () => {
             return returnValue;
         },
         [isMapInitialized],
+    );
+};
+
+export const useSetMapSize = () => {
+    const createMapUtilityFunction = useCreateMapUtilityFunction();
+    return useCallback(
+        (width, height) => {
+            return createMapUtilityFunction(() => {
+                if (width && height) {
+                    const canvas = map.getCanvas();
+                    canvas.width = `${width}px`;
+                    canvas.height = `${height}px`;
+                    canvas.style.width = `${width}px`;
+                    canvas.style.height = `${height}px`;
+                    map.resize();
+                }
+            });
+        },
+        [createMapUtilityFunction],
     );
 };
 

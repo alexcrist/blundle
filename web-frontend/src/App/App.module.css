@@ -6,3 +6,14 @@
     right: 0;
     bottom: 0;
 }
+
+.content {
+    display: flex;
+    flex: 1;
+}
+
+@media (aspect-ratio < 1) {
+    .content {
+        flex-direction: column;
+    }
+}

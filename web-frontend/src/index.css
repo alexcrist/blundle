@@ -3,3 +3,10 @@ body {
     padding: 0;
 }
 
+* {
+    font-family: "Lexend Giga", sans-serif;
+}
+
+input {
+    font-family: "Lexend Giga", sans-serif;
+}

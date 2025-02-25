@@ -1,20 +1,8 @@
 .container {
     display: flex;
-    position: relative;
-    width: 100%;
+    flex: 1;
 }
 
-.stars {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    background-color: #021630;
-}
-
-.star {
-    position: absolute;
-    background-color: white;
+.map {
+    transition: opacity 600ms;
 }
