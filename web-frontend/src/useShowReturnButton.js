@@ -1,0 +1,73 @@
+import { useEffect, useState } from "react";
+import { useCountryOfTheDay } from "./countries/useCountryOfTheDay";
+import { getMap, useAddMapEventListener } from "./map/map";
+
+const MIN_ZOOM = 3;
+const MAX_CENTRAL_ANGLE_DEG = 40;
+
+export const useShowReturnButton = () => {
+    const addMapEventListener = useAddMapEventListener();
+    const countryOfTheDay = useCountryOfTheDay();
+    const [showReturnButton, setShowReturnButton] = useState(false);
+    useEffect(() => {
+        return addMapEventListener("moveend", () => {
+            const isCountryInBounds = getIsCountryInBounds(countryOfTheDay);
+            const zoom = getMap().getZoom();
+            const centralAngleDeg = getCentralAngleDeg(countryOfTheDay);
+            console.log("centralAngleDeg", centralAngleDeg);
+            const showReturnButton =
+                !isCountryInBounds ||
+                zoom < MIN_ZOOM ||
+                centralAngleDeg > MAX_CENTRAL_ANGLE_DEG;
+            setShowReturnButton(showReturnButton);
+        });
+    }, [addMapEventListener, countryOfTheDay]);
+    return showReturnButton;
+};
+
+const getIsCountryInBounds = (country) => {
+    if (!country) {
+        return false;
+    }
+    const [lon, lat] = country.coordLonLat;
+    const bounds = getMap().getBounds();
+    const minLon = bounds.getWest();
+    const maxLon = bounds.getEast();
+    const minLat = bounds.getSouth();
+    const maxLat = bounds.getNorth();
+
+    // Must be within lat bounds
+    if (lat < minLat || lat > maxLat) {
+        return false;
+    }
+
+    // Normal case: bbox does not cross international date line
+    if (minLon <= maxLon) {
+        return lon >= minLon && lon <= maxLon;
+    }
+
+    // Edge case: bbox crosses international date line (minLon > maxLon)
+    else {
+        return lon >= minLon || lon <= maxLon;
+    }
+};
+
+// Returns the 'central angle' between the center of the map view port and the
+// center of the given country
+const getCentralAngleDeg = (country) => {
+    const lon1 = getMap().getCenter().lng;
+    const lat1 = getMap().getCenter().lat;
+    const [lon2, lat2] = country.coordLonLat;
+    const toRadians = (deg) => deg * (Math.PI / 180);
+    const toDegrees = (rad) => rad * (180 / Math.PI);
+    const φ1 = toRadians(lat1);
+    const φ2 = toRadians(lat2);
+    const λ1 = toRadians(lon1);
+    const λ2 = toRadians(lon2);
+    const deltaLambda = λ2 - λ1;
+    const angleRad = Math.acos(
+        Math.sin(φ1) * Math.sin(φ2) +
+            Math.cos(φ1) * Math.cos(φ2) * Math.cos(deltaLambda),
+    );
+    return toDegrees(angleRad);
+};

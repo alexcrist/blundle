@@ -130,7 +130,7 @@ export const MAP_STYLE = {
                         [4, "{NAME}"],
                     ],
                 },
-                visibility: "visible",
+                visibility: "none",
                 "text-max-width": 10,
                 "text-transform": {
                     stops: [

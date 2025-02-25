@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { getCountry } from "./getCountry";
+import { getCountryOfTheDay } from "./getCountry";
 
-export const useCountry = () => {
+export const useCountryOfTheDay = () => {
     const [country, setCountry] = useState(null);
     useEffect(() => {
         (async () => {
             try {
-                const country = await getCountry();
+                const country = await getCountryOfTheDay();
                 setCountry(country);
             } catch (error) {
                 console.error(error);

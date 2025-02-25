@@ -65,6 +65,18 @@ const useCreateMapUtilityFunction = () => {
     );
 };
 
+export const useSetMapLayoutProperty = () => {
+    const createMapUtilityFunction = useCreateMapUtilityFunction();
+    return useCallback(
+        (layerId, layoutKey, layoutValue) => {
+            return createMapUtilityFunction(() => {
+                map.setLayoutProperty(layerId, layoutKey, layoutValue);
+            });
+        },
+        [createMapUtilityFunction],
+    );
+};
+
 export const useSetMapSize = () => {
     const createMapUtilityFunction = useCreateMapUtilityFunction();
     return useCallback(

@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import {
     useCallback,
     useEffect,
@@ -7,7 +8,10 @@ import {
 } from "react";
 import { useSelector } from "react-redux";
 import { MAP_CONTAINER_ID } from "../../constants";
+import { useCountryOfTheDay } from "../../countries/useCountryOfTheDay";
+import { useShowReturnButton } from "../../useShowReturnButton";
 import { useInitMap, useSetMapSize } from "../map";
+import { useFlyToCountry } from "../useFlyToCountry";
 import styles from "./Map.module.css";
 import "./maplibre.css";
 
@@ -36,12 +40,32 @@ const Map = () => {
         onLayoutChange();
     }, [onLayoutChange]);
     useEffect(() => {
-        window.addEventListener("resize", onLayoutChange);
-        return () => window.removeEventListener("resize", onLayoutChange);
+        const onResize = (event) => {
+            event.stopImmediatePropagation();
+            onLayoutChange();
+        };
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
     }, [onLayoutChange]);
+
+    // 'Return to country' button
+    const showReturnButton = useShowReturnButton();
+    const flyToCountry = useFlyToCountry();
+    const countryOfTheDay = useCountryOfTheDay();
+    const onClickReturnToCountry = () => {
+        flyToCountry(countryOfTheDay);
+    };
 
     return (
         <div className={styles.container} ref={ref}>
+            <button
+                className={classNames(styles.returnToCountryButton, {
+                    [styles.isVisible]: showReturnButton,
+                })}
+                onClick={onClickReturnToCountry}
+            >
+                Return to country
+            </button>
             <div
                 id={MAP_CONTAINER_ID}
                 className={styles.map}
