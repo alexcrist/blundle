@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import { useCountryOfTheDay } from "./countries/useCountryOfTheDay";
 import { getMap, useAddMapEventListener } from "./map/map";
@@ -13,16 +14,30 @@ export const useShowReturnButton = () => {
     const countryOfTheDay = useCountryOfTheDay();
     const [showReturnButton, setShowReturnButton] = useState(false);
     useEffect(() => {
-        return addMapEventListener("moveend", () => {
-            if (Date.now() - lastClicked < RETURN_BUTTON_COOLDOWN_MS) {
-                return;
-            }
-            const isCountryInBounds = getIsCountryInBounds(countryOfTheDay);
-            const centralAngleDeg = getCentralAngleDeg(countryOfTheDay);
-            const showReturnButton =
-                !isCountryInBounds || centralAngleDeg > MAX_CENTRAL_ANGLE_DEG;
-            setShowReturnButton(showReturnButton);
-        });
+        const onMove = _.debounce(
+            () => {
+                if (Date.now() - lastClicked < RETURN_BUTTON_COOLDOWN_MS) {
+                    return;
+                }
+                const isCountryInBounds = getIsCountryInBounds(countryOfTheDay);
+                const centralAngleDeg = getCentralAngleDeg(countryOfTheDay);
+                const showReturnButton =
+                    !isCountryInBounds ||
+                    centralAngleDeg > MAX_CENTRAL_ANGLE_DEG;
+                setShowReturnButton(showReturnButton);
+            },
+            100,
+            {
+                maxWait: 300,
+                trailing: true,
+                leading: false,
+            },
+        );
+        const eraseFns = [
+            addMapEventListener("move", onMove),
+            addMapEventListener("zoom", onMove),
+        ];
+        return () => eraseFns.forEach((eraseFn) => eraseFn());
     }, [addMapEventListener, countryOfTheDay]);
     const flyToCountry = useFlyToCountry();
     const onClickReturnButton = useCallback(() => {

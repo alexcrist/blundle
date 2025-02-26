@@ -1,4 +1,5 @@
 .container {
+    width: calc(100vw - 40px);
     padding: 20px;
     backdrop-filter: blur(4px);
     color: white;
@@ -18,6 +19,7 @@
 .title {
     font-size: 16px;
     line-height: 1.5;
+    text-align: center;
 }
 
 .inputContainer {

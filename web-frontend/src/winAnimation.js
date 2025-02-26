@@ -46,18 +46,19 @@ const animteWinText = (country) => {
     const message = document.createElement("div");
     message.innerHTML = `
         <div style="text-align: center;">Correct! It's ${country.name}!</div>
-        <img src="dance.gif" style="width: 350px; max-width: 50vw; text-align: center; margin: 0 auto;">
+        <img src="dance.gif" style="width: 350px; max-width: 100%; text-align: center; margin: 0 auto; image-rendering: pixelated">
     `;
     message.style["font-size"] = "30px";
     message.style["display"] = "flex";
     message.style["flex-direction"] = "column";
     message.style["align-items"] = "center";
     message.style["font-weight"] = "bold";
-    message.style["padding"] = "10px 20px";
+    message.style["padding"] = "20px";
     message.style["color"] = "black";
-    message.style["background-color"] = "white";
+    message.style["background-color"] = "#ffffff99";
+    message.style["backdrop-filter"] = "blur(4px)";
     message.style["border-radius"] = "20px";
-    message.style["max-width"] = "90dvw";
+    message.style["max-width"] = "calc(100dvw - 80px)";
     message.style["transition"] =
         `opacity ${MESSAGE_ANIMATION_DURATION_MS}ms linear`;
     message.style["opacity"] = "0";
