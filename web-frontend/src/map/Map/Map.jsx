@@ -3,10 +3,8 @@ import _ from "lodash";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { MAP_CONTAINER_ID } from "../../constants";
-import { useCountryOfTheDay } from "../../countries/useCountryOfTheDay";
 import { useShowReturnButton } from "../../useShowReturnButton";
 import { useInitMap, useMapResize } from "../map";
-import { useFlyToCountry } from "../useFlyToCountry";
 import styles from "./Map.module.css";
 import "./maplibre.css";
 
@@ -19,12 +17,7 @@ const Map = () => {
     );
 
     // 'Return to country' button
-    const showReturnButton = useShowReturnButton();
-    const flyToCountry = useFlyToCountry();
-    const countryOfTheDay = useCountryOfTheDay();
-    const onClickReturnToCountry = () => {
-        flyToCountry(countryOfTheDay);
-    };
+    const [showReturnButton, onClickReturnButton] = useShowReturnButton();
 
     // Calculate map height
     const ref = useRef();
@@ -57,7 +50,7 @@ const Map = () => {
                 className={classNames(styles.returnToCountryButton, {
                     [styles.isVisible]: showReturnButton,
                 })}
-                onClick={onClickReturnToCountry}
+                onClick={onClickReturnButton}
             >
                 Return to country
             </button>

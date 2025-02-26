@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCountryOfTheDay } from "./countries/useCountryOfTheDay";
 import { getMap, useAddMapEventListener } from "./map/map";
+import { useFlyToCountry } from "./map/useFlyToCountry";
 
 const MAX_CENTRAL_ANGLE_DEG = 40;
+const RETURN_BUTTON_COOLDOWN_MS = 1000;
+
+let lastClicked = Date.now();
 
 export const useShowReturnButton = () => {
     const addMapEventListener = useAddMapEventListener();
@@ -10,6 +14,9 @@ export const useShowReturnButton = () => {
     const [showReturnButton, setShowReturnButton] = useState(false);
     useEffect(() => {
         return addMapEventListener("moveend", () => {
+            if (Date.now() - lastClicked < RETURN_BUTTON_COOLDOWN_MS) {
+                return;
+            }
             const isCountryInBounds = getIsCountryInBounds(countryOfTheDay);
             const centralAngleDeg = getCentralAngleDeg(countryOfTheDay);
             const showReturnButton =
@@ -17,7 +24,13 @@ export const useShowReturnButton = () => {
             setShowReturnButton(showReturnButton);
         });
     }, [addMapEventListener, countryOfTheDay]);
-    return showReturnButton;
+    const flyToCountry = useFlyToCountry();
+    const onClickReturnButton = useCallback(() => {
+        setShowReturnButton(false);
+        lastClicked = Date.now();
+        flyToCountry(countryOfTheDay);
+    }, [countryOfTheDay, flyToCountry]);
+    return [showReturnButton, onClickReturnButton];
 };
 
 const getIsCountryInBounds = (country) => {
