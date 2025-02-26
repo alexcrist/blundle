@@ -19,7 +19,11 @@ export const useFlyToCountry = () => {
                 // under the hood) where giving a paddingOptions will make it think
                 // a bbox near the international date line can't be flown too.
                 // Therefore, no padding is given here.
-                flyToBbox(country.bbox);
+                try {
+                    flyToBbox(country.bbox);
+                } catch (error) {
+                    console.warn(error);
+                }
             }
         },
         [flyToBbox, flyToPoint],

@@ -77,23 +77,13 @@ export const useSetMapLayoutProperty = () => {
     );
 };
 
-export const useSetMapSize = () => {
+export const useMapResize = () => {
     const createMapUtilityFunction = useCreateMapUtilityFunction();
-    return useCallback(
-        (width, height) => {
-            return createMapUtilityFunction(() => {
-                if (width && height) {
-                    const canvas = map.getCanvas();
-                    canvas.width = `${width}px`;
-                    canvas.height = `${height}px`;
-                    canvas.style.width = `${width}px`;
-                    canvas.style.height = `${height}px`;
-                    map.resize();
-                }
-            });
-        },
-        [createMapUtilityFunction],
-    );
+    return useCallback(() => {
+        return createMapUtilityFunction(() => {
+            map.resize();
+        });
+    }, [createMapUtilityFunction]);
 };
 
 export const useAddMapEventListener = () => {

@@ -17,6 +17,7 @@
 
 .title {
     font-size: 16px;
+    line-height: 1.5;
 }
 
 .inputContainer {
@@ -70,7 +71,7 @@
 
 .suggestions {
     position: absolute;
-    top: 34px;
+    top: 41px;
     left: 0;
     right: 0;
     border-radius: 4px;

@@ -14,6 +14,34 @@ import styles from "./Guesses.module.css";
 
 const NUM_SUGGESTIONS = 3;
 
+const TRY_AGAIN_MESSAGES = _.shuffle([
+    "Not quite, but you're getting there!",
+    "Close, but no cigar. Try again!",
+    "Almost! You're on the right track.",
+    "Not that one, but I admire the confidence.",
+    "You're thinking globally, but not quite correctly.",
+    "Nope, but I like where your head's at.",
+    "That’s a bold guess—give it another go!",
+    "You’re circling the right area. Try again!",
+    "Not this time, but your world knowledge is expanding.",
+    "A good effort! But let’s take another shot.",
+    "You’ve got the spirit, now find the right spot!",
+    "A solid attempt, but the map says otherwise.",
+    "Wrong border, right energy!",
+    "You missed it this time, but you’re learning fast.",
+    "Not this one, but hey, you’re one guess smarter now.",
+    "That’s a respectable miss—keep going!",
+    "You’re exploring, and that’s what counts! Try again.",
+    "Geography is tricky, but so are you. Go again!",
+    "I see where you’re coming from, but nope!",
+    "You’re sharpening your atlas skills, even when you miss!",
+    "The world is big, and so is your potential—guess again!",
+    "That guess had style, even if it wasn’t right.",
+    "Not quite, but that was a thoughtful choice!",
+    "You might be off by a few borders, but keep at it!",
+    "You're not lost, just discovering! Try again.",
+]);
+
 const sanitize = (str) => str.toLowerCase().replace(/[^a-z0-9]+/gi, "");
 
 const Guesses = () => {
@@ -70,15 +98,17 @@ const Guesses = () => {
 
     // Suggestions
     const suggestions = useMemo(() => {
-        if (inputValue.length < 2) {
+        if (inputValue.length < 1) {
             return [];
+        }
+        for (const guessableCountry of guessableCountries) {
+            if (guessableCountry.name === inputValue) {
+                return [];
+            }
         }
         return guessableCountries
             .filter((country) => {
-                return (
-                    country.cleanName.includes(cleanInput) &&
-                    country.name !== inputValue
-                );
+                return country.cleanName.includes(cleanInput);
             })
             .filter((__, index) => {
                 return index < NUM_SUGGESTIONS;
@@ -128,7 +158,7 @@ const Guesses = () => {
         dispatch(mainSlice.actions.addGuessedCountryName(country.name));
         const isCorrect = country.name === countryOfTheDay.name;
         if (isCorrect) {
-            winAnimation();
+            winAnimation(countryOfTheDay);
         } else {
             flyToCountry(country);
         }
@@ -155,7 +185,10 @@ const Guesses = () => {
         if (didLose) {
             return `Nice try! The answer was ${countryOfTheDay?.name}!`;
         }
-        return "Guess the highlighted country";
+        if (guessedCountries.length === 0) {
+            return "Guess the highlighted country";
+        }
+        return TRY_AGAIN_MESSAGES[guessedCountries.length - 1];
     }, [countryOfTheDay?.name, didLose, didWin, guessedCountries.length]);
 
     return (
@@ -179,7 +212,9 @@ const Guesses = () => {
                     </button>
                     <div className={styles.suggestions}>
                         {suggestions.map((country) => {
-                            const onClick = () => setInputValue(country.name);
+                            const onClick = () => {
+                                setInputValue(country.name);
+                            };
                             return (
                                 <div
                                     onClick={onClick}

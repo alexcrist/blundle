@@ -1,6 +1,12 @@
+html,
 body {
     margin: 0;
     padding: 0;
+    position: relative;
+    height: 100dvh;
+    width: 100dvw;
+    overflow: hidden;
+    position: fixed;
 }
 
 * {

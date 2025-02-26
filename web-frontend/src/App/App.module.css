@@ -3,17 +3,13 @@
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    height: 100dvh;
+    width: 100dvw;
+    overflow: hidden;
 }
 
 .content {
     display: flex;
     flex: 1;
-}
-
-@media (aspect-ratio < 1) {
-    .content {
-        flex-direction: column;
-    }
+    flex-direction: column;
 }

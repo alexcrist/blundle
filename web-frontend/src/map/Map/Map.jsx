@@ -1,16 +1,11 @@
 import classNames from "classnames";
-import {
-    useCallback,
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from "react";
+import _ from "lodash";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { MAP_CONTAINER_ID } from "../../constants";
 import { useCountryOfTheDay } from "../../countries/useCountryOfTheDay";
 import { useShowReturnButton } from "../../useShowReturnButton";
-import { useInitMap, useSetMapSize } from "../map";
+import { useInitMap, useMapResize } from "../map";
 import { useFlyToCountry } from "../useFlyToCountry";
 import styles from "./Map.module.css";
 import "./maplibre.css";
@@ -23,31 +18,6 @@ const Map = () => {
         (state) => state.main.isMapInitialized,
     );
 
-    // Resize map (doesn't fully work)
-    const setMapSize = useSetMapSize();
-    const ref = useRef(null);
-    const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
-    const onLayoutChange = useCallback(() => {
-        if (ref) {
-            const box = ref.current.getBoundingClientRect();
-            setWidth(box.width);
-            setHeight(box.height);
-            setMapSize(box.width, box.height);
-        }
-    }, [setMapSize]);
-    useLayoutEffect(() => {
-        onLayoutChange();
-    }, [onLayoutChange]);
-    useEffect(() => {
-        const onResize = (event) => {
-            event.stopImmediatePropagation();
-            onLayoutChange();
-        };
-        window.addEventListener("resize", onResize);
-        return () => window.removeEventListener("resize", onResize);
-    }, [onLayoutChange]);
-
     // 'Return to country' button
     const showReturnButton = useShowReturnButton();
     const flyToCountry = useFlyToCountry();
@@ -55,6 +25,31 @@ const Map = () => {
     const onClickReturnToCountry = () => {
         flyToCountry(countryOfTheDay);
     };
+
+    // Calculate map height
+    const ref = useRef();
+    const mapResize = useMapResize();
+    const [mapHeightPx, setMapHeightPx] = useState(window.innerHeight / 2);
+    const updateMapHeight = useCallback(() => {
+        if (ref.current) {
+            const dims = ref.current.getBoundingClientRect();
+            setMapHeightPx(dims.height);
+            mapResize();
+        }
+    }, [mapResize]);
+    useEffect(() => {
+        if (ref.current) {
+            updateMapHeight();
+            const onResize = _.debounce(updateMapHeight, 75, {
+                maxWait: 300,
+                leading: false,
+                trailing: true,
+            });
+            const resizeObserver = new ResizeObserver(onResize);
+            resizeObserver.observe(ref.current);
+            return () => resizeObserver.disconnect();
+        }
+    }, [updateMapHeight]);
 
     return (
         <div className={styles.container} ref={ref}>
@@ -68,12 +63,10 @@ const Map = () => {
             </button>
             <div
                 id={MAP_CONTAINER_ID}
-                className={styles.map}
-                style={{
-                    width: `${width}px`,
-                    height: `${height}px`,
-                    opacity: isMapInitialized ? 1 : 0,
-                }}
+                className={classNames(styles.map, {
+                    [styles.isVisible]: isMapInitialized,
+                })}
+                style={{ height: `${mapHeightPx}px` }}
             />
         </div>
     );

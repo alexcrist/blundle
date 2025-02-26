@@ -9,8 +9,8 @@ import { useFlyToCountry } from "../map/useFlyToCountry";
 import StarsBackground from "../StarsBackground/StarsBackground";
 import styles from "./App.module.css";
 
-const COUNTRY_OF_DAY_COLOR = "#ACFE7C";
-const INCORRECT_GUESS_COLOR = "#DDDDDD";
+const COUNTRY_OF_DAY_COLOR = "#98FE5B";
+const INCORRECT_GUESS_COLOR = "#CCCCCC";
 
 let hasFlown = false;
 

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useCountryOfTheDay } from "./countries/useCountryOfTheDay";
 import { getMap, useAddMapEventListener } from "./map/map";
 
-const MIN_ZOOM = 3;
 const MAX_CENTRAL_ANGLE_DEG = 40;
 
 export const useShowReturnButton = () => {
@@ -12,13 +11,9 @@ export const useShowReturnButton = () => {
     useEffect(() => {
         return addMapEventListener("moveend", () => {
             const isCountryInBounds = getIsCountryInBounds(countryOfTheDay);
-            const zoom = getMap().getZoom();
             const centralAngleDeg = getCentralAngleDeg(countryOfTheDay);
-            console.log("centralAngleDeg", centralAngleDeg);
             const showReturnButton =
-                !isCountryInBounds ||
-                zoom < MIN_ZOOM ||
-                centralAngleDeg > MAX_CENTRAL_ANGLE_DEG;
+                !isCountryInBounds || centralAngleDeg > MAX_CENTRAL_ANGLE_DEG;
             setShowReturnButton(showReturnButton);
         });
     }, [addMapEventListener, countryOfTheDay]);
