@@ -1,11 +1,10 @@
 {
     "type": "module",
-    "homepage": "https://alexcrist.github.io/daily-games",
     "scripts": {
         "dev": "vite --open --host",
         "build": "vite build",
         "preview": "vite preview",
-        "deploy": "vite build && gh-pages -d dist"
+        "deploy": "vite build && gh-pages -d dist --cname blundle.com"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.2.7",

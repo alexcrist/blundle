@@ -1,5 +1,5 @@
 .container {
-    width: calc(100vw - 40px);
+    width: calc(100vw - 20px);
     padding: 10px;
     backdrop-filter: blur(4px);
     color: white;
@@ -73,7 +73,7 @@
 
 .suggestions {
     position: absolute;
-    top: 41px;
+    bottom: 44px;
     left: 0;
     right: 0;
     border-radius: 4px;

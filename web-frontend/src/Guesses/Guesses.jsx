@@ -12,7 +12,7 @@ import { winAnimation } from "../winAnimation";
 import styles from "./Guesses.module.css";
 
 const NUM_SUGGESTIONS = 3;
-const MAX_GUESSES = 4;
+const MAX_GUESSES = 3;
 
 const TRY_AGAIN_MESSAGES = _.shuffle([
     "Not quite, but you're getting there!",
