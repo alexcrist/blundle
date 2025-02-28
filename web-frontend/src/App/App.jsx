@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useCountryOfTheDay } from "../countries/useCountryOfTheDay";
 import { useGuessedCountries } from "../countries/useGuessedCountries";
 import Guesses from "../Guesses/Guesses";
+import Header from "../Header/Header";
 import { useRenderGeoJson } from "../map/map";
 import Map from "../map/Map/Map";
 import { useFlyToCountry } from "../map/useFlyToCountry";
@@ -67,6 +68,7 @@ const App = () => {
     return (
         <div className={styles.container}>
             <div className={styles.content}>
+                <Header />
                 <Map />
                 <Guesses />
             </div>

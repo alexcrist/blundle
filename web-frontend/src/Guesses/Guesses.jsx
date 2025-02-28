@@ -2,7 +2,6 @@ import classNames from "classnames";
 import _ from "lodash";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { MAX_GUESSES } from "../constants";
 import { getCountryData } from "../countries/getCountry";
 import { useCountryOfTheDay } from "../countries/useCountryOfTheDay";
 import { useGuessedCountries } from "../countries/useGuessedCountries";
@@ -13,6 +12,7 @@ import { winAnimation } from "../winAnimation";
 import styles from "./Guesses.module.css";
 
 const NUM_SUGGESTIONS = 3;
+const MAX_GUESSES = 4;
 
 const TRY_AGAIN_MESSAGES = _.shuffle([
     "Not quite, but you're getting there!",
@@ -106,13 +106,11 @@ const Guesses = () => {
                 return [];
             }
         }
-        return guessableCountries
-            .filter((country) => {
-                return country.cleanName.includes(cleanInput);
-            })
-            .filter((__, index) => {
-                return index < NUM_SUGGESTIONS;
-            });
+        return _(guessableCountries)
+            .filter((country) => country.cleanName.includes(cleanInput))
+            .sortBy((country) => country.cleanName.indexOf(cleanInput))
+            .filter((__, index) => index < NUM_SUGGESTIONS)
+            .value();
     }, [cleanInput, guessableCountries, inputValue]);
 
     // Determine win / loss
