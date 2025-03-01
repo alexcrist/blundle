@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MAP_CONTAINER_ID } from "../constants";
 import mainSlice from "../mainSlice";
-import { MAP_STYLE } from "./mapStyle";
+import { MAP_STYLE_MAP_TILER } from "./mapStyleMapTiler";
 
 let map = null;
 
@@ -14,7 +14,7 @@ export const useInitMap = () => {
     return useCallback(() => {
         map = new maplibre.Map({
             container: MAP_CONTAINER_ID,
-            style: MAP_STYLE,
+            style: MAP_STYLE_MAP_TILER,
             center: [27, -17],
             zoom: 2.5,
         });

@@ -11,8 +11,9 @@ import StarsBackground from "../StarsBackground/StarsBackground";
 import WinModal from "../WinModal/WinModal";
 import styles from "./App.module.css";
 
-const COUNTRY_OF_DAY_COLOR = "#98FE5B";
+const TARGET_COUNTRY_COLOR = "#ffffff";
 const INCORRECT_GUESS_COLOR = "#CCCCCC";
+const BORDER_COLOR = "#1E1205";
 
 let hasFlown = false;
 
@@ -37,10 +38,17 @@ const App = () => {
     const renderGeoJson = useRenderGeoJson();
     useEffect(() => {
         if (targetCountry) {
+            console.log("targetCountry.geojson", targetCountry.geojson);
+            const points = targetCountry.geojson.geometry.coordinates.map(
+                (c) => c[0].length,
+            );
+            console.log("points", points);
+            const a = Math.max(...points);
+            console.log("points", a);
             return renderGeoJson(targetCountry.geojson, {
-                fillColor: COUNTRY_OF_DAY_COLOR,
-                fillOpacity: 0.5,
-                strokeColor: "#000000",
+                fillColor: TARGET_COUNTRY_COLOR,
+                fillOpacity: 0.3,
+                strokeColor: BORDER_COLOR,
                 strokeOpacity: 1,
                 strokeWidth: 3.5,
             });
@@ -58,7 +66,7 @@ const App = () => {
                 return renderGeoJson(country.geojson, {
                     fillColor: INCORRECT_GUESS_COLOR,
                     fillOpacity: 0.5,
-                    strokeColor: "#000000",
+                    strokeColor: BORDER_COLOR,
                     strokeOpacity: 1,
                     strokeWidth: 3.5,
                 });

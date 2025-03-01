@@ -51,7 +51,7 @@ const Guesses = () => {
     // Get guessed countries
     const guessedCountries = useGuessedCountries();
 
-    // Get country of the day
+    // Get target country
     const targetCountry = useTargetCountry();
 
     // Load countries

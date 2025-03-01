@@ -1,12 +1,10 @@
-import {
-    COASTLINE_STROKE_COLOR,
-    COUNTRY_FILL_COLOR,
-    COUNTRY_STROKE_COLOR,
-    COUNTRY_TEXT_COLOR,
-    OCEAN_FILL_COLOR,
-} from "./mapVisuals";
+const OCEAN_FILL_COLOR = "#D8F2FF";
+const COASTLINE_STROKE_COLOR = "#666666";
+const COUNTRY_FILL_COLOR = "#B7D7B3";
+const COUNTRY_STROKE_COLOR = "#999999";
+const COUNTRY_TEXT_COLOR = "#08254d";
 
-export const MAP_STYLE = {
+export const MAP_STYLE_MAP_LIBRE = {
     id: "43f36e14-e3f5-43c1-84c0-50a9c80dc5c7",
     name: "MapLibre",
     zoom: 0.8619833357855968,
