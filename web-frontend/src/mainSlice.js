@@ -5,6 +5,7 @@ const mainSlice = createSlice({
     initialState: {
         isMapInitialized: false,
         guessedCountryNames: [],
+        isWinModalVisible: false,
     },
     reducers: {
         setIsMapInitialized: (state, action) => {
@@ -12,6 +13,9 @@ const mainSlice = createSlice({
         },
         addGuessedCountryName: (state, action) => {
             state.guessedCountryNames.unshift(action.payload);
+        },
+        setIsWinModalVisible: (state, action) => {
+            state.isWinModalVisible = action.payload;
         },
     },
 });

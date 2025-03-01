@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useCountryOfTheDay } from "../countries/useCountryOfTheDay";
 import { useGuessedCountries } from "../countries/useGuessedCountries";
+import { useTargetCountry } from "../countries/useTargetCountry";
 import Guesses from "../Guesses/Guesses";
 import Header from "../Header/Header";
 import { useRenderGeoJson } from "../map/map";
 import Map from "../map/Map/Map";
 import { useFlyToCountry } from "../map/useFlyToCountry";
 import StarsBackground from "../StarsBackground/StarsBackground";
+import WinModal from "../WinModal/WinModal";
 import styles from "./App.module.css";
 
 const COUNTRY_OF_DAY_COLOR = "#98FE5B";
@@ -16,7 +17,7 @@ const INCORRECT_GUESS_COLOR = "#CCCCCC";
 let hasFlown = false;
 
 const App = () => {
-    const countryOfTheDay = useCountryOfTheDay();
+    const targetCountry = useTargetCountry();
 
     // Fly to country on load
     const isMapInitialized = useSelector(
@@ -25,18 +26,18 @@ const App = () => {
     const flyToCountry = useFlyToCountry();
     useEffect(() => {
         if (isMapInitialized) {
-            if (countryOfTheDay !== null && !hasFlown) {
+            if (targetCountry !== null && !hasFlown) {
                 hasFlown = true;
-                flyToCountry(countryOfTheDay);
+                flyToCountry(targetCountry);
             }
         }
-    }, [countryOfTheDay, flyToCountry, isMapInitialized]);
+    }, [targetCountry, flyToCountry, isMapInitialized]);
 
     // Highlight today's country
     const renderGeoJson = useRenderGeoJson();
     useEffect(() => {
-        if (countryOfTheDay) {
-            return renderGeoJson(countryOfTheDay.geojson, {
+        if (targetCountry) {
+            return renderGeoJson(targetCountry.geojson, {
                 fillColor: COUNTRY_OF_DAY_COLOR,
                 fillOpacity: 0.5,
                 strokeColor: "#000000",
@@ -44,14 +45,14 @@ const App = () => {
                 strokeWidth: 3.5,
             });
         }
-    }, [countryOfTheDay, renderGeoJson]);
+    }, [targetCountry, renderGeoJson]);
 
     // Highlight guessed countries
     const guessedCountries = useGuessedCountries();
     useEffect(() => {
         const eraseFns = guessedCountries
             .filter((country) => {
-                return country.name !== countryOfTheDay.name;
+                return country.name !== targetCountry.name;
             })
             .map((country) => {
                 return renderGeoJson(country.geojson, {
@@ -63,7 +64,7 @@ const App = () => {
                 });
             });
         return () => eraseFns.forEach((eraseFn) => eraseFn());
-    }, [countryOfTheDay, guessedCountries, renderGeoJson]);
+    }, [targetCountry, guessedCountries, renderGeoJson]);
 
     return (
         <div className={styles.container}>
@@ -73,6 +74,7 @@ const App = () => {
                 <Guesses />
             </div>
             <StarsBackground />
+            <WinModal />
         </div>
     );
 };

@@ -1,0 +1,45 @@
+.modal {
+    z-index: 1003;
+    padding: 20px 20px 10px;
+    border-radius: 4px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    background-color: #ffffffee;
+}
+
+.content {
+}
+
+.title {
+    font-size: 20px;
+}
+
+.gif {
+    image-rendering: pixelated;
+    width: 200px;
+    max-width: 100%;
+    margin: 20px 0 25px;
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    align-items: center;
+    justify-content: center;
+}
+
+.button {
+    margin: 0 10px 10px;
+    width: 122px;
+}
+
+.confettiCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100dvh;
+    z-index: 1000;
+    filter: blur(1.5px);
+}

@@ -2,20 +2,19 @@ const COUNTRY_DATA_PROMISE = import("./country-borders.json");
 
 let seed = Math.random() * 999999999;
 
-export const getCountryOfTheDay = async () => {
-    const countries = await getCountryData();
+export const getTargetCountry = async () => {
+    const countries = await getCountries();
     const seed = getSeedForToday();
-    const index =
-        Math.floor(getRandomNumberWithSeed(seed) * 9999999) % countries.length;
+    const index = Math.floor(getRandomNumberWithSeed(seed) * countries.length);
     return countries[index];
 };
 
-export const getCountryData = async () => {
+export const getCountries = async () => {
     return (await COUNTRY_DATA_PROMISE).default;
 };
 
 export const getCountryFromName = async (name) => {
-    const countries = await getCountryData();
+    const countries = await getCountries();
     return countries.find((country) => country.name === name);
 };
 

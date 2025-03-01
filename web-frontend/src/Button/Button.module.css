@@ -1,0 +1,28 @@
+.button {
+    background-color: #05192d;
+    border: 2px solid #05192d;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 5px 10px;
+    line-height: 1;
+    font-size: 14px;
+}
+
+.button:hover {
+    opacity: 0.5;
+}
+
+.button.isSecondary {
+    background-color: white;
+    color: #05192d;
+}
+
+.isDisabled {
+    opacity: 0.5;
+    cursor: normal;
+}
+
+.button.isDisabled:hover {
+    opacity: 0.5;
+}

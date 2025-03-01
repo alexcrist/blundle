@@ -2,13 +2,12 @@ import classNames from "classnames";
 import _ from "lodash";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getCountryData } from "../countries/getCountry";
-import { useCountryOfTheDay } from "../countries/useCountryOfTheDay";
+import { getCountries } from "../countries/getCountry";
 import { useGuessedCountries } from "../countries/useGuessedCountries";
+import { useTargetCountry } from "../countries/useTargetCountry";
 import mainSlice from "../mainSlice";
 import { useSetMapLayoutProperty } from "../map/map";
 import { useFlyToCountry } from "../map/useFlyToCountry";
-import { winAnimation } from "../winAnimation";
 import styles from "./Guesses.module.css";
 
 const NUM_SUGGESTIONS = 3;
@@ -53,14 +52,14 @@ const Guesses = () => {
     const guessedCountries = useGuessedCountries();
 
     // Get country of the day
-    const countryOfTheDay = useCountryOfTheDay();
+    const targetCountry = useTargetCountry();
 
     // Load countries
     const [countries, setCountries] = useState([]);
     useEffect(() => {
         (async () => {
             const cleanNames = {};
-            const countries = (await getCountryData()).map((country) => {
+            const countries = (await getCountries()).map((country) => {
                 const cleanName = sanitize(country.name);
                 if (cleanNames[cleanName]) {
                     const message = `Error: two countries share the name when sanitized: ${cleanName}`;
@@ -116,15 +115,12 @@ const Guesses = () => {
     // Determine win / loss
     const didWin = useMemo(() => {
         for (const country of guessedCountries) {
-            if (
-                countryOfTheDay?.name &&
-                countryOfTheDay.name === country.name
-            ) {
+            if (targetCountry?.name && targetCountry.name === country.name) {
                 return true;
             }
         }
         return false;
-    }, [countryOfTheDay, guessedCountries]);
+    }, [targetCountry, guessedCountries]);
     const didLose = useMemo(() => {
         return !didWin && guessedCountries.length === MAX_GUESSES;
     }, [didWin, guessedCountries]);
@@ -154,16 +150,16 @@ const Guesses = () => {
         }
         setInputValue("");
         dispatch(mainSlice.actions.addGuessedCountryName(country.name));
-        const isCorrect = country.name === countryOfTheDay.name;
+        const isCorrect = country.name === targetCountry.name;
         if (isCorrect) {
-            winAnimation(countryOfTheDay);
+            dispatch(mainSlice.actions.setIsWinModalVisible(true));
         } else {
             flyToCountry(country);
         }
     }, [
         cleanInput,
         countries,
-        countryOfTheDay,
+        targetCountry,
         dispatch,
         flyToCountry,
         isInputValid,
@@ -175,60 +171,74 @@ const Guesses = () => {
     // Get title text
     const titleText = useMemo(() => {
         if (didWin && guessedCountries.length === 1) {
-            return `Wow! First try! ${countryOfTheDay?.name} is correct!`;
+            return `Wow! First try! ${targetCountry?.name} is correct!`;
         }
         if (didWin && guessedCountries.length > 1) {
-            return `That's correct, you win! The answer was ${countryOfTheDay?.name}!`;
+            return `That's correct, you win! The answer was ${targetCountry?.name}!`;
         }
         if (didLose) {
-            return `Nice try! The answer was ${countryOfTheDay?.name}!`;
+            return `Nice try! The answer was ${targetCountry?.name}!`;
         }
         if (guessedCountries.length === 0) {
             return "Guess the highlighted country";
         }
         return TRY_AGAIN_MESSAGES[guessedCountries.length - 1];
-    }, [countryOfTheDay?.name, didLose, didWin, guessedCountries.length]);
+    }, [targetCountry?.name, didLose, didWin, guessedCountries.length]);
+
+    // On click play again
+    const onClickPlayAgain = () => window.location.reload();
 
     return (
         <div className={styles.container}>
             <div className={styles.content}>
                 <div className={styles.title}>{titleText}</div>
-                <div className={styles.inputContainer}>
-                    <input
-                        disabled={isInputDisabled}
-                        className={styles.input}
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                    />
-
+                {isGameOver ? (
                     <button
-                        className={styles.button}
-                        disabled={isInputDisabled || !isInputValid}
-                        onClick={onClickSubmit}
+                        className={classNames(
+                            styles.button,
+                            styles.playAgainButton,
+                        )}
+                        onClick={onClickPlayAgain}
                     >
-                        Submit
+                        Play again
                     </button>
-                    <div className={styles.suggestions}>
-                        {suggestions.map((country) => {
-                            const onClick = () => {
-                                setInputValue(country.name);
-                            };
-                            return (
-                                <div
-                                    onClick={onClick}
-                                    key={country.cleanName}
-                                    className={styles.suggestion}
-                                >
-                                    {country.name}
-                                </div>
-                            );
-                        })}
+                ) : (
+                    <div className={styles.inputContainer}>
+                        <input
+                            disabled={isInputDisabled}
+                            className={styles.input}
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                        />
+                        <button
+                            className={styles.button}
+                            disabled={isInputDisabled || !isInputValid}
+                            onClick={onClickSubmit}
+                        >
+                            Submit
+                        </button>
+                        <div className={styles.suggestions}>
+                            {suggestions.map((country) => {
+                                const onClick = () => {
+                                    setInputValue(country.name);
+                                };
+                                return (
+                                    <div
+                                        onClick={onClick}
+                                        key={country.cleanName}
+                                        className={styles.suggestion}
+                                    >
+                                        {country.name}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
-                </div>
+                )}
                 {_.range(MAX_GUESSES).map((index) => {
                     const isCorrect =
-                        countryOfTheDay?.name &&
-                        countryOfTheDay?.name === guessedCountries[index]?.name;
+                        targetCountry?.name &&
+                        targetCountry?.name === guessedCountries[index]?.name;
                     return (
                         <div
                             className={classNames(styles.guess, {

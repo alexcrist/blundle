@@ -32,12 +32,12 @@
     font-size: 14px;
     border: none;
     border-radius: 4px;
-    background-color: #ffffff99;
+    background-color: #ffffffcc;
     backdrop-filter: blur(4px);
     outline: none;
     box-shadow:
-        0 0px 20px rgba(0, 0, 0, 0.3),
-        0 0px 10px rgba(0, 0, 0, 0.15);
+        0px 0px 20px rgba(0, 0, 0, 0.2),
+        0 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .returnToCountryButton.isVisible {

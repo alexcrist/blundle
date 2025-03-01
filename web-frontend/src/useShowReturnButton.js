@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { useCallback, useEffect, useState } from "react";
-import { useCountryOfTheDay } from "./countries/useCountryOfTheDay";
+import { useTargetCountry } from "./countries/useTargetCountry";
 import { getMap, useAddMapEventListener } from "./map/map";
 import { useFlyToCountry } from "./map/useFlyToCountry";
 
@@ -11,7 +11,7 @@ let lastClicked = Date.now();
 
 export const useShowReturnButton = () => {
     const addMapEventListener = useAddMapEventListener();
-    const countryOfTheDay = useCountryOfTheDay();
+    const targetCountry = useTargetCountry();
     const [showReturnButton, setShowReturnButton] = useState(false);
     useEffect(() => {
         const onMove = _.debounce(
@@ -19,8 +19,8 @@ export const useShowReturnButton = () => {
                 if (Date.now() - lastClicked < RETURN_BUTTON_COOLDOWN_MS) {
                     return;
                 }
-                const isCountryInBounds = getIsCountryInBounds(countryOfTheDay);
-                const centralAngleDeg = getCentralAngleDeg(countryOfTheDay);
+                const isCountryInBounds = getIsCountryInBounds(targetCountry);
+                const centralAngleDeg = getCentralAngleDeg(targetCountry);
                 const showReturnButton =
                     !isCountryInBounds ||
                     centralAngleDeg > MAX_CENTRAL_ANGLE_DEG;
@@ -38,13 +38,13 @@ export const useShowReturnButton = () => {
             addMapEventListener("zoom", onMove),
         ];
         return () => eraseFns.forEach((eraseFn) => eraseFn());
-    }, [addMapEventListener, countryOfTheDay]);
+    }, [addMapEventListener, targetCountry]);
     const flyToCountry = useFlyToCountry();
     const onClickReturnButton = useCallback(() => {
         setShowReturnButton(false);
         lastClicked = Date.now();
-        flyToCountry(countryOfTheDay);
-    }, [countryOfTheDay, flyToCountry]);
+        flyToCountry(targetCountry);
+    }, [targetCountry, flyToCountry]);
     return [showReturnButton, onClickReturnButton];
 };
 
