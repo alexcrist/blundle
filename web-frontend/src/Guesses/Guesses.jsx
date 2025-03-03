@@ -151,11 +151,10 @@ const Guesses = () => {
         }
         setInputValue("");
         dispatch(mainSlice.actions.addGuessedCountryName(country.name));
+        flyToCountry(country);
         const isCorrect = country.name === targetCountry.name;
         if (isCorrect) {
             dispatch(mainSlice.actions.setIsWinModalVisible(true));
-        } else {
-            flyToCountry(country);
         }
     }, [
         cleanInput,
