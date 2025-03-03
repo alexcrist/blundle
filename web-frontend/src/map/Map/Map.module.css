@@ -44,3 +44,9 @@
     opacity: 1;
     pointer-events: auto;
 }
+
+.loading {
+    font-size: 18px;
+    font-style: italic;
+    color: #ffffff99;
+}

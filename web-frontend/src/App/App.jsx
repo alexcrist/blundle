@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { COUNTRY_LABELS_LAYER_ID } from "../constants";
 import { useGuessedCountries } from "../countries/useGuessedCountries";
 import { useTargetCountry } from "../countries/useTargetCountry";
 import Guesses from "../Guesses/Guesses";
@@ -11,9 +12,9 @@ import StarsBackground from "../StarsBackground/StarsBackground";
 import WinModal from "../WinModal/WinModal";
 import styles from "./App.module.css";
 
-const TARGET_COUNTRY_COLOR = "#ffffff";
-const INCORRECT_GUESS_COLOR = "#CCCCCC";
-const BORDER_COLOR = "#1E1205";
+const TARGET_COUNTRY_FILL_COLOR = "#26D800";
+const INCORRECT_COUNTRY_FILL_COLOR = "#CCCCCC";
+const TARGET_COUNTRY_BORDER_COLOR = "#000000";
 
 let hasFlown = false;
 
@@ -38,20 +39,17 @@ const App = () => {
     const renderGeoJson = useRenderGeoJson();
     useEffect(() => {
         if (targetCountry) {
-            console.log("targetCountry.geojson", targetCountry.geojson);
-            const points = targetCountry.geojson.geometry.coordinates.map(
-                (c) => c[0].length,
+            return renderGeoJson(
+                targetCountry.geojson,
+                {
+                    fillColor: TARGET_COUNTRY_FILL_COLOR,
+                    fillOpacity: 0.3,
+                    strokeColor: TARGET_COUNTRY_BORDER_COLOR,
+                    strokeOpacity: 1,
+                    strokeWidth: 2,
+                },
+                COUNTRY_LABELS_LAYER_ID,
             );
-            console.log("points", points);
-            const a = Math.max(...points);
-            console.log("points", a);
-            return renderGeoJson(targetCountry.geojson, {
-                fillColor: TARGET_COUNTRY_COLOR,
-                fillOpacity: 0.3,
-                strokeColor: BORDER_COLOR,
-                strokeOpacity: 1,
-                strokeWidth: 3.5,
-            });
         }
     }, [targetCountry, renderGeoJson]);
 
@@ -63,13 +61,17 @@ const App = () => {
                 return country.name !== targetCountry.name;
             })
             .map((country) => {
-                return renderGeoJson(country.geojson, {
-                    fillColor: INCORRECT_GUESS_COLOR,
-                    fillOpacity: 0.5,
-                    strokeColor: BORDER_COLOR,
-                    strokeOpacity: 1,
-                    strokeWidth: 3.5,
-                });
+                return renderGeoJson(
+                    country.geojson,
+                    {
+                        fillColor: INCORRECT_COUNTRY_FILL_COLOR,
+                        fillOpacity: 0.5,
+                        strokeColor: TARGET_COUNTRY_BORDER_COLOR,
+                        strokeOpacity: 1,
+                        strokeWidth: 2,
+                    },
+                    COUNTRY_LABELS_LAYER_ID,
+                );
             });
         return () => eraseFns.forEach((eraseFn) => eraseFn());
     }, [targetCountry, guessedCountries, renderGeoJson]);

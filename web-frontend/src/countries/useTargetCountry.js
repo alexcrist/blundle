@@ -10,7 +10,7 @@ export const useTargetCountry = () => {
                 setCountry(country);
             } catch (error) {
                 console.error(error);
-                alert("Error: failed to retrieve a country.");
+                // alert("Error: failed to retrieve a country.");
             }
         })();
     }, []);

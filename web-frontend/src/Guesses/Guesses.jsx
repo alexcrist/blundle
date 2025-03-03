@@ -2,6 +2,7 @@ import classNames from "classnames";
 import _ from "lodash";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
+import { COUNTRY_LABELS_LAYER_ID } from "../constants";
 import { getCountries } from "../countries/getCountry";
 import { useGuessedCountries } from "../countries/useGuessedCountries";
 import { useTargetCountry } from "../countries/useTargetCountry";
@@ -130,7 +131,7 @@ const Guesses = () => {
     const setMapLayoutProperty = useSetMapLayoutProperty();
     useEffect(() => {
         const visibility = isGameOver ? "visible" : "none";
-        setMapLayoutProperty("countries-label", "visibility", visibility);
+        setMapLayoutProperty(COUNTRY_LABELS_LAYER_ID, "visibility", visibility);
     }, [isGameOver, setMapLayoutProperty]);
 
     // Handle guess submission

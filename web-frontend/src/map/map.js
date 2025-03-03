@@ -1,9 +1,13 @@
 import maplibre from "maplibre-gl";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MAP_CONTAINER_ID } from "../constants";
+import { useCountriesGeojson } from "../countries/useCountriesGeojson";
 import mainSlice from "../mainSlice";
-import { MAP_STYLE_MAP_TILER } from "./mapStyleMapTiler";
+import { addCountriesLayer } from "./addCountriesLayer";
+import { addCountryLabelsLayer } from "./addCountryLabels";
+
+const OCEAN_FILL_COLOR = "#99AEF3";
 
 let map = null;
 
@@ -11,10 +15,28 @@ export const getMap = () => map;
 
 export const useInitMap = () => {
     const dispatch = useDispatch();
-    return useCallback(() => {
+    const countriesGeoJson = useCountriesGeojson();
+
+    useEffect(() => {
+        if (!countriesGeoJson) {
+            return;
+        }
         map = new maplibre.Map({
             container: MAP_CONTAINER_ID,
-            style: MAP_STYLE_MAP_TILER,
+            style: {
+                glyphs: "/{fontstack}/{range}.pbf",
+                layers: [
+                    {
+                        id: "background",
+                        type: "background",
+                        paint: { "background-color": OCEAN_FILL_COLOR },
+                        filter: ["all"],
+                        layout: { visibility: "visible" },
+                    },
+                ],
+                sources: {},
+                version: 8,
+            },
             center: [27, -17],
             zoom: 2.5,
         });
@@ -23,7 +45,9 @@ export const useInitMap = () => {
             map.setProjection({ type: "globe" });
         });
 
-        map.on("load", () => {
+        map.on("load", async () => {
+            await addCountriesLayer(map);
+            await addCountryLabelsLayer(map);
             dispatch(mainSlice.actions.setIsMapInitialized(true));
         });
 
@@ -33,7 +57,7 @@ export const useInitMap = () => {
             map.remove();
             map = null;
         };
-    }, [dispatch]);
+    }, [countriesGeoJson, dispatch]);
 };
 
 // Safeguards map utility functions from being called before the map has
@@ -118,43 +142,58 @@ const DEFAULT_RENDER_GEO_JSON_OPTIONS = {
 export const useRenderGeoJson = () => {
     const createMapUtilityFunction = useCreateMapUtilityFunction();
     return useCallback(
-        (geojson, options = DEFAULT_RENDER_GEO_JSON_OPTIONS) => {
+        (geojson, options, beforeLayerId) => {
             return createMapUtilityFunction(() => {
-                const getOption = (key) => {
-                    return options[key] ?? DEFAULT_RENDER_GEO_JSON_OPTIONS[key];
-                };
-                const sourceId = `geo-json-${Math.random()}`;
-                const fillLayerId = `${sourceId}-fill`;
-                const strokeLayerId = `${sourceId}-stroke`;
-                map.addSource(sourceId, { type: "geojson", data: geojson });
-                map.addLayer({
-                    id: fillLayerId,
-                    type: "fill",
-                    source: sourceId,
-                    paint: {
-                        "fill-color": getOption("fillColor"),
-                        "fill-opacity": getOption("fillOpacity"),
-                    },
-                });
-                map.addLayer({
-                    id: strokeLayerId,
-                    type: "line",
-                    source: sourceId,
-                    paint: {
-                        "line-color": getOption("strokeColor"),
-                        "line-opacity": getOption("strokeOpacity"),
-                        "line-width": getOption("strokeWidth"),
-                    },
-                });
-                return () => {
-                    map.removeLayer(fillLayerId);
-                    map.removeLayer(strokeLayerId);
-                    map.removeSource(sourceId);
-                };
+                return addGeoJsonLayer(map, geojson, options, beforeLayerId);
             });
         },
         [createMapUtilityFunction],
     );
+};
+
+export const addGeoJsonLayer = (
+    map,
+    geojson,
+    options = DEFAULT_RENDER_GEO_JSON_OPTIONS,
+    beforeLayerId,
+) => {
+    const getOption = (key) => {
+        return options[key] ?? DEFAULT_RENDER_GEO_JSON_OPTIONS[key];
+    };
+    const sourceId = `geo-json-${Math.random()}`;
+    const fillLayerId = `${sourceId}-fill`;
+    const strokeLayerId = `${sourceId}-stroke`;
+    map.addSource(sourceId, { type: "geojson", data: geojson });
+    map.addLayer(
+        {
+            id: fillLayerId,
+            type: "fill",
+            source: sourceId,
+            paint: {
+                "fill-color": getOption("fillColor"),
+                "fill-opacity": getOption("fillOpacity"),
+            },
+        },
+        beforeLayerId,
+    );
+    map.addLayer(
+        {
+            id: strokeLayerId,
+            type: "line",
+            source: sourceId,
+            paint: {
+                "line-color": getOption("strokeColor"),
+                "line-opacity": getOption("strokeOpacity"),
+                "line-width": getOption("strokeWidth"),
+            },
+        },
+        beforeLayerId,
+    );
+    return () => {
+        map.removeLayer(fillLayerId);
+        map.removeLayer(strokeLayerId);
+        map.removeSource(sourceId);
+    };
 };
 
 const DEFAULT_FLY_TO_BBOX_OPTIONS = { padding: 100 };

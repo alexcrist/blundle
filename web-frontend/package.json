@@ -8,6 +8,7 @@
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.2.7",
+        "@turf/bbox": "^7.2.0",
         "canvas-confetti": "^1.9.3",
         "classnames": "^2.5.1",
         "lodash": "^4.17.21",

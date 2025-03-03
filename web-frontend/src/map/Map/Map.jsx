@@ -10,8 +10,7 @@ import "./maplibre.css";
 
 const Map = () => {
     // Initialize the map
-    const initMap = useInitMap();
-    useEffect(() => initMap(), [initMap]);
+    useInitMap();
     const isMapInitialized = useSelector(
         (state) => state.main.isMapInitialized,
     );
@@ -54,6 +53,9 @@ const Map = () => {
             >
                 Return to country
             </button>
+            {!isMapInitialized && (
+                <div className={styles.loading}>Loading...</div>
+            )}
             <div
                 id={MAP_CONTAINER_ID}
                 className={classNames(styles.map, {
