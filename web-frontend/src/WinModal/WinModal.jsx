@@ -18,6 +18,11 @@ const WinModal = () => {
     );
     const targetCountry = useTargetCountry();
 
+    // Preload dancing earth image
+    useEffect(() => {
+        new Image().src = "dance.gif";
+    }, []);
+
     // Blast confetti
     const [canvasRef, setCanvasRef] = useState(null);
     const updateCanvasRef = useCallback((node) => setCanvasRef(node), []);
