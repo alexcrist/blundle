@@ -2,8 +2,9 @@ import { COUNTRY_LABELS_LAYER_ID } from "../constants";
 import { getCountries } from "../countries/getCountry";
 
 const ZOOM_TO_TEXT_SIZES = [
-    [1, 2],
-    [10, 50],
+    [1, 1],
+    [10, 40],
+    [20, 400],
 ].reduce((flatList, [zoom, textSize]) => {
     return [...flatList, Number(zoom), Number(textSize)];
 }, []);
@@ -24,14 +25,32 @@ export const addCountryLabelsLayer = async (map) => {
                             type: "Point",
                             coordinates: [country.nameLon, country.nameLat],
                         },
-                        properties: { label: country.allNames },
+                        properties: {
+                            name: country.name,
+                            endonym: "\n" + (country.endonyms[0] ?? ""),
+                        },
                     };
                 }),
             },
         },
         layout: {
             visibility: "none",
-            "text-field": ["get", "label"],
+            "text-field": [
+                "format",
+                ["get", "name"],
+                {
+                    "font-scale": 1,
+                    "text-opacity": 1,
+                },
+                " ",
+                {},
+                ["get", "endonym"],
+                {
+                    "font-scale": 0.7,
+                    "text-opacity": 0.7,
+                },
+            ],
+
             "text-size": [
                 "interpolate",
                 ["exponential", 1.1],
@@ -39,6 +58,8 @@ export const addCountryLabelsLayer = async (map) => {
                 ...ZOOM_TO_TEXT_SIZES,
             ],
             "text-font": ["NotoSansRegular"],
+            "symbol-placement": "point",
+            "text-allow-overlap": true,
         },
         paint: {
             "text-color": "#000000",
