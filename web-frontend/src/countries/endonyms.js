@@ -180,7 +180,7 @@ export const ENDONYMS = {
     Lebanon: ["Lubnān", "لبنان", "Liban"],
     Lesotho: ["Lesotho"],
     Liberia: ["Liberia"],
-    Libya: ["Libya", "ⵍⵉⴱⵢⴰ", "Lībiyā", "ليبيا"],
+    Libya: ["Libya", "Lībiyā", "ليبيا", "ⵍⵉⴱⵢⴰ"],
     Liechtenstein: ["Liechtenstein"],
     Lithuania: ["Lietuva"],
     Luxembourg: ["Lëtzebuerg", "Luxemburg", "Luxembourg"],

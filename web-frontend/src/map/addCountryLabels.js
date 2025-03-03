@@ -1,10 +1,10 @@
 import { COUNTRY_LABELS_LAYER_ID } from "../constants";
 import { getCountries } from "../countries/getCountry";
 
-const ZOOM_TO_TEXT_SIZES = Object.entries({
-    5: 10,
-    10: 20,
-}).reduce((flatList, [zoom, textSize]) => {
+const ZOOM_TO_TEXT_SIZES = [
+    [1, 2],
+    [10, 50],
+].reduce((flatList, [zoom, textSize]) => {
     return [...flatList, Number(zoom), Number(textSize)];
 }, []);
 
@@ -30,11 +30,11 @@ export const addCountryLabelsLayer = async (map) => {
             },
         },
         layout: {
-            // visibility: "none",
+            visibility: "none",
             "text-field": ["get", "label"],
             "text-size": [
                 "interpolate",
-                ["linear"],
+                ["exponential", 1.1],
                 ["zoom"],
                 ...ZOOM_TO_TEXT_SIZES,
             ],

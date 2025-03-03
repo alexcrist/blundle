@@ -30,8 +30,6 @@ export const useInitMap = () => {
                         id: "background",
                         type: "background",
                         paint: { "background-color": OCEAN_FILL_COLOR },
-                        filter: ["all"],
-                        layout: { visibility: "visible" },
                     },
                 ],
                 sources: {},
