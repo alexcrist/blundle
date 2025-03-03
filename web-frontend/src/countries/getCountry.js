@@ -2,6 +2,7 @@ import turfBbox from "@turf/bbox";
 import { ENDONYMS } from "./endonyms";
 
 const MIN_POPULATION = 1000;
+const MAX_ENDONYMS = 3;
 const IGNORED_TERRITORIES = [
     "Dhekelia Cantonment",
     "Guantanamo Bay Naval Base",
@@ -39,14 +40,14 @@ const COUNTRIES_PROMISE = (async () => {
                 console.error(`Could not find endonyms for ${exonym}`);
                 endonyms = [];
             }
-            let name = exonym;
-            endonyms.forEach((endonym) => {
-                if (exonym !== endonym) {
-                    name += "\n" + endonym;
-                }
-            });
+            let allNames = exonym;
+            endonyms
+                .filter((endonym) => endonym !== exonym)
+                .filter((__, index) => index < MAX_ENDONYMS)
+                .forEach((endonym) => (allNames += "\n" + endonym));
             const countryFormatted = {
-                name,
+                name: exonym,
+                allNames,
                 codeIso3: properties.ISO_A3,
                 geojson,
                 bbox,

@@ -24,7 +24,7 @@ export const addCountryLabelsLayer = async (map) => {
                             type: "Point",
                             coordinates: [country.nameLon, country.nameLat],
                         },
-                        properties: { label: country.name },
+                        properties: { label: country.allNames },
                     };
                 }),
             },
@@ -38,7 +38,7 @@ export const addCountryLabelsLayer = async (map) => {
                 ["zoom"],
                 ...ZOOM_TO_TEXT_SIZES,
             ],
-            "text-font": ["MetropolisRegular"],
+            "text-font": ["NotoSansRegular"],
         },
         paint: {
             "text-color": "#000000",
