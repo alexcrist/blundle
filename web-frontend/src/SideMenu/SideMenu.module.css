@@ -1,0 +1,51 @@
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 0;
+    padding: 10px;
+    width: 250px;
+    margin-left: -290px;
+}
+
+.modalBackground {
+}
+
+.modalVisible .modal {
+    margin-left: 0;
+}
+
+.title {
+    font-family: "Reenie Beanie", cursive;
+    letter-spacing: 3px;
+    white-space: pre-wrap;
+    font-size: 30px;
+    font-weight: bold;
+    padding-bottom: 20px;
+    margin: 10px 10px 20px;
+    border-bottom: 1px solid #bbb;
+    text-align: center;
+}
+
+.item {
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.item a {
+    color: black;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.item a:hover {
+    opacity: 0.7;
+}
+
+.icon {
+    margin-right: 20px;
+}

@@ -3,11 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 const mainSlice = createSlice({
     name: "main",
     initialState: {
+        isSideMenuOpen: false,
         isMapInitialized: false,
         guessedCountryNames: [],
         isWinModalVisible: false,
     },
     reducers: {
+        setIsSideMenuOpen: (state, action) => {
+            state.isSideMenuOpen = action.payload;
+        },
         setIsMapInitialized: (state, action) => {
             state.isMapInitialized = action.payload;
         },

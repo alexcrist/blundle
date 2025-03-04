@@ -10,6 +10,11 @@
     z-index: 999;
     backdrop-filter: blur(4px);
     background-color: hsla(0, 0%, 0%, 0.133);
+    opacity: 0;
+}
+
+.container.visible {
+    opacity: 1;
 }
 
 .content {
@@ -21,4 +26,12 @@
         0 10px 20px rgba(0, 0, 0, 0.1),
         0 3px 6px rgba(0, 0, 0, 0.13);
     max-width: 70dvw;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
 }

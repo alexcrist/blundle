@@ -8,6 +8,7 @@ import Header from "../Header/Header";
 import { useRenderGeoJson } from "../map/map";
 import Map from "../map/Map/Map";
 import { useFlyToCountry } from "../map/useFlyToCountry";
+import SideMenu from "../SideMenu/SideMenu";
 import StarsBackground from "../StarsBackground/StarsBackground";
 import WinModal from "../WinModal/WinModal";
 import styles from "./App.module.css";
@@ -84,6 +85,7 @@ const App = () => {
                 <Guesses />
             </div>
             <StarsBackground />
+            <SideMenu />
             <WinModal />
         </div>
     );

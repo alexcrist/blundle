@@ -41,6 +41,7 @@ const WinModal = () => {
         <>
             <Modal
                 isVisible={isVisible}
+                setIsNotVisible={onClickClose}
                 className={styles.modal}
                 backgroundChildren={
                     <canvas
