@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./Modal.module.css";
 
-const TRANSITION_TIME_MS = 500;
+export const MODAL_TRANSITION_TIME_MS = 500;
 
 const Modal = ({
     children,
@@ -30,7 +30,7 @@ const Modal = ({
     useEffect(() => {
         if (!isVisible && isShowing) {
             setHasVisibleClass(false);
-            setTimeout(() => setIsShowing(false), TRANSITION_TIME_MS);
+            setTimeout(() => setIsShowing(false), MODAL_TRANSITION_TIME_MS);
         }
     }, [isShowing, isVisible]);
 
@@ -47,13 +47,13 @@ const Modal = ({
             className={classNames(styles.container, {
                 [classNames(styles.visible, visibleClassName)]: hasVisibleClass,
             })}
-            style={{ transition: `all ${TRANSITION_TIME_MS}ms` }}
+            style={{ transition: `all ${MODAL_TRANSITION_TIME_MS}ms` }}
         >
             {backgroundChildren ?? null}
             <div className={styles.background} onClick={onClickBackground} />
             <div
                 className={classNames(styles.content, className)}
-                style={{ transition: `all ${TRANSITION_TIME_MS}ms` }}
+                style={{ transition: `all ${MODAL_TRANSITION_TIME_MS}ms` }}
             >
                 {children}
             </div>

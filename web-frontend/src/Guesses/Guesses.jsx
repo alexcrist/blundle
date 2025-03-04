@@ -10,6 +10,7 @@ import mainSlice from "../mainSlice";
 import { useSetMapLayoutProperty } from "../map/map";
 import { useFlyToCountry } from "../map/useFlyToCountry";
 import { useArrowKeySuggestionSelection } from "../useArrowKeySuggestionSelection";
+import { useReset } from "../useReset";
 import styles from "./Guesses.module.css";
 
 const NUM_SUGGESTIONS = 3;
@@ -187,9 +188,7 @@ const Guesses = () => {
     }, [targetCountry?.name, didLose, didWin, guessedCountries.length]);
 
     // On click play again
-    const onClickPlayAgain = () => {
-        dispatch(mainSlice.actions.reset());
-    };
+    const reset = useReset();
 
     // Allow user to use arrow keys and enter to select from suggestions
     const hoveredSuggestionIndex = useArrowKeySuggestionSelection(
@@ -208,7 +207,7 @@ const Guesses = () => {
                             styles.button,
                             styles.playAgainButton,
                         )}
-                        onClick={onClickPlayAgain}
+                        onClick={reset}
                     >
                         Play again
                     </button>

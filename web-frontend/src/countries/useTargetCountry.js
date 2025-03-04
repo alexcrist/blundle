@@ -8,9 +8,7 @@ export const useTargetCountry = () => {
     useEffect(() => {
         (async () => {
             try {
-                const countries = await getCountries();
-                const index = Math.floor(randomSeed * countries.length);
-                const country = countries[index];
+                const country = await getTargetCountryForSeed(randomSeed);
                 setCountry(country);
             } catch (error) {
                 console.error(error);
@@ -18,4 +16,10 @@ export const useTargetCountry = () => {
         })();
     }, [randomSeed]);
     return country;
+};
+
+export const getTargetCountryForSeed = async (randomSeed) => {
+    const countries = await getCountries();
+    const index = Math.floor(randomSeed * countries.length);
+    return countries[index];
 };

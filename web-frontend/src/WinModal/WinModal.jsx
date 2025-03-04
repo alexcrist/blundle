@@ -5,6 +5,7 @@ import { ConfettiBlaster } from "../ConfettiBlaster";
 import { useTargetCountry } from "../countries/useTargetCountry";
 import mainSlice from "../mainSlice";
 import Modal from "../Modal/Modal";
+import { useReset } from "../useReset";
 import styles from "./WinModal.module.css";
 
 const WinModal = () => {
@@ -35,9 +36,7 @@ const WinModal = () => {
 
     // Button click handlers
     const onClickClose = () => setIsVisible(false);
-    const onClickPlayAgain = () => {
-        dispatch(mainSlice.actions.reset());
-    };
+    const reset = useReset();
 
     return (
         <>
@@ -65,10 +64,7 @@ const WinModal = () => {
                         >
                             Close
                         </Button>
-                        <Button
-                            className={styles.button}
-                            onClick={onClickPlayAgain}
-                        >
+                        <Button className={styles.button} onClick={reset}>
                             Play again
                         </Button>
                     </div>

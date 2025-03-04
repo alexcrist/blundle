@@ -23,9 +23,11 @@ const mainSlice = createSlice({
             state.isWinModalVisible = action.payload;
         },
         reset: (state) => {
-            state.randomSeed = Math.random();
             state.guessedCountryNames = [];
             state.isWinModalVisible = false;
+        },
+        setRandomSeed: (state, action) => {
+            state.randomSeed = action.payload;
         },
     },
 });
