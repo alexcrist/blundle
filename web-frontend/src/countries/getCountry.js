@@ -122,14 +122,6 @@ const COUNTRIES_PROMISE = (async () => {
     console.info("Countries", _.groupBy(countries, "type"));
 })();
 
-let seed = Math.random();
-
-export const getTargetCountry = async () => {
-    const countries = await getCountries();
-    const index = Math.floor(seed * countries.length);
-    return countries[index];
-};
-
 export const getCountries = async () => {
     const countries = await COUNTRIES_PROMISE;
     return countries;

@@ -186,7 +186,9 @@ const Guesses = () => {
     }, [targetCountry?.name, didLose, didWin, guessedCountries.length]);
 
     // On click play again
-    const onClickPlayAgain = () => window.location.reload();
+    const onClickPlayAgain = () => {
+        dispatch(mainSlice.actions.reset());
+    };
 
     return (
         <div className={styles.container}>

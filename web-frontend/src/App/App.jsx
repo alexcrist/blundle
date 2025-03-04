@@ -17,7 +17,7 @@ const TARGET_COUNTRY_FILL_COLOR = "#26D800";
 const INCORRECT_COUNTRY_FILL_COLOR = "#CCCCCC";
 const TARGET_COUNTRY_BORDER_COLOR = "#000000";
 
-let hasFlown = false;
+let lastCountryNameFlownTo = null;
 
 const App = () => {
     const targetCountry = useTargetCountry();
@@ -29,8 +29,11 @@ const App = () => {
     const flyToCountry = useFlyToCountry();
     useEffect(() => {
         if (isMapInitialized) {
-            if (targetCountry !== null && !hasFlown) {
-                hasFlown = true;
+            if (
+                targetCountry !== null &&
+                lastCountryNameFlownTo !== targetCountry.name
+            ) {
+                lastCountryNameFlownTo = targetCountry.name;
                 flyToCountry(targetCountry);
             }
         }

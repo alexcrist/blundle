@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const mainSlice = createSlice({
     name: "main",
     initialState: {
+        randomSeed: Math.random(),
         isSideMenuOpen: false,
         isMapInitialized: false,
         guessedCountryNames: [],
@@ -20,6 +21,11 @@ const mainSlice = createSlice({
         },
         setIsWinModalVisible: (state, action) => {
             state.isWinModalVisible = action.payload;
+        },
+        reset: (state) => {
+            state.randomSeed = Math.random();
+            state.guessedCountryNames = [];
+            state.isWinModalVisible = false;
         },
     },
 });

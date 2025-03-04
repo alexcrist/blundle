@@ -35,7 +35,9 @@ const WinModal = () => {
 
     // Button click handlers
     const onClickClose = () => setIsVisible(false);
-    const onClickPlayAgain = () => window.location.reload();
+    const onClickPlayAgain = () => {
+        dispatch(mainSlice.actions.reset());
+    };
 
     return (
         <>
