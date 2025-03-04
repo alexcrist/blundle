@@ -111,3 +111,7 @@
     width: 100%;
     margin: 10px 0;
 }
+
+.isArrowKeyHovered {
+    background-color: #ddd;
+}

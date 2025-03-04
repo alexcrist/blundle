@@ -9,6 +9,7 @@ import { useTargetCountry } from "../countries/useTargetCountry";
 import mainSlice from "../mainSlice";
 import { useSetMapLayoutProperty } from "../map/map";
 import { useFlyToCountry } from "../map/useFlyToCountry";
+import { useArrowKeySuggestionSelection } from "../useArrowKeySuggestionSelection";
 import styles from "./Guesses.module.css";
 
 const NUM_SUGGESTIONS = 3;
@@ -190,6 +191,13 @@ const Guesses = () => {
         dispatch(mainSlice.actions.reset());
     };
 
+    // Allow user to use arrow keys and enter to select from suggestions
+    const hoveredSuggestionIndex = useArrowKeySuggestionSelection(
+        suggestions,
+        setInputValue,
+        onClickSubmit,
+    );
+
     return (
         <div className={styles.container}>
             <div className={styles.content}>
@@ -220,15 +228,23 @@ const Guesses = () => {
                             Submit
                         </button>
                         <div className={styles.suggestions}>
-                            {suggestions.map((country) => {
+                            {suggestions.map((country, index) => {
                                 const onClick = () => {
                                     setInputValue(country.name);
                                 };
+                                const isArrowKeyHovered =
+                                    hoveredSuggestionIndex === index;
                                 return (
                                     <div
                                         onClick={onClick}
                                         key={country.cleanName}
-                                        className={styles.suggestion}
+                                        className={classNames(
+                                            styles.suggestion,
+                                            {
+                                                [styles.isArrowKeyHovered]:
+                                                    isArrowKeyHovered,
+                                            },
+                                        )}
                                     >
                                         {country.name}
                                     </div>
