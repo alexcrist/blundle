@@ -9,7 +9,6 @@ const Modal = ({
     isVisible,
     setIsNotVisible,
     className,
-    backgroundClassName,
     visibleClassName,
     backgroundChildren,
 }) => {
@@ -45,14 +44,9 @@ const Modal = ({
     }
     return (
         <div
-            className={classNames(
-                styles.container,
-                styles.backgroundClassName,
-                {
-                    [classNames(styles.visible, visibleClassName)]:
-                        hasVisibleClass,
-                },
-            )}
+            className={classNames(styles.container, {
+                [classNames(styles.visible, visibleClassName)]: hasVisibleClass,
+            })}
             style={{ transition: `all ${TRANSITION_TIME_MS}ms` }}
         >
             {backgroundChildren ?? null}
