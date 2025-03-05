@@ -10,6 +10,12 @@
     position: relative;
 }
 
+@media (max-height: 430px) {
+    .container {
+        display: none;
+    }
+}
+
 .title {
     color: white;
     padding: 5px 10px 5px 0;

@@ -115,3 +115,13 @@
 .isArrowKeyHovered {
     background-color: #ddd;
 }
+
+@media (max-height: 430px) {
+    .guess {
+        display: none;
+    }
+
+    .inputContainer {
+        margin-bottom: 0;
+    }
+}
