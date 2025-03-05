@@ -21,13 +21,16 @@ const COUNTRIES_TO_COMBINE = [
         parentCountryName: "Somalia",
         countryNames: ["Somalia", "Somaliland"],
     },
+    {
+        parentCountryName: "Kazakhstan",
+        countryNames: ["Kazakhstan", "Baikonur"],
+    },
 ];
 const IGNORED_COUNTRIES = [
     "Dhekelia Cantonment",
     "Guantanamo Bay Naval Base",
     "Siachen Glacier",
     "Akrotiri Sovereign Base Area",
-    "Baikonur",
     "British Indian Ocean Territory",
 ];
 const EXONYM_MAP = {
