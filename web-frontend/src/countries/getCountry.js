@@ -8,6 +8,12 @@ import _ from "lodash";
 import { ENDONYMS } from "./endonyms";
 
 const MIN_POPULATION = 1000;
+const IGNORED_COUNTRIES = [
+    "Dhekelia Cantonment",
+    "Siachen Glacier",
+    "Akrotiri Sovereign Base Area",
+    "British Indian Ocean Territory",
+];
 const COUNTRIES_TO_COMBINE = [
     {
         parentCountryName: "Cyprus",
@@ -19,21 +25,63 @@ const COUNTRIES_TO_COMBINE = [
     },
     {
         parentCountryName: "Somalia",
-        countryNames: ["Somalia", "Somaliland"],
+        countryNames: ["Somalia", "Somaliland", "Puntland"],
     },
     {
         parentCountryName: "Kazakhstan",
         countryNames: ["Kazakhstan", "Baikonur"],
     },
+    {
+        parentCountryName: "Saint Martin",
+        countryNames: ["Saint Martin", "Sint Maarten"],
+    },
+    {
+        parentCountryName: "Cuba",
+        countryNames: ["Cuba", "Guantanamo Bay Naval Base"],
+    },
+    {
+        parentCountryName: "West Bank",
+        countryNames: ["West Bank", "Gaza Strip"],
+    },
+    {
+        parentCountryName: "Syria",
+        countryNames: ["Syria", "United Nations Disengagement Observer Force"],
+    },
+    {
+        parentCountryName: "Brussels Capital Region",
+        countryNames: [
+            "Brussels Capital Region",
+            "Flemish Brabant",
+            "Walloon Brabant",
+        ],
+    },
+    {
+        parentCountryName: "Georgia",
+        countryNames: ["Georgia", "Adjara"],
+    },
+    {
+        parentCountryName: "Federation of Bosnia and Herzegovina",
+        countryNames: [
+            "Federation of Bosnia and Herzegovina",
+            "Republika Srpska",
+            "Brčko",
+        ],
+    },
+    {
+        parentCountryName: "Iraq",
+        countryNames: ["Iraq", "Kurdistan Region"],
+    },
+    {
+        parentCountryName: "Serbia",
+        countryNames: ["Serbia", "Vojvodina"],
+    },
 ];
-const IGNORED_COUNTRIES = [
-    "Dhekelia Cantonment",
-    "Guantanamo Bay Naval Base",
-    "Siachen Glacier",
-    "Akrotiri Sovereign Base Area",
-    "British Indian Ocean Territory",
-];
+
 const EXONYM_MAP = {
+    "Autonomous Region of Bougainville": "Bougainville",
+    "Federation of Bosnia and Herzegovina": "Bosnia and Herzegovina",
+    "Brussels Capital Region": "Belgium",
+    "West Bank": "Palestine",
     "Ivory Coast": "Côte d'Ivoire",
     "People's Republic of China": "China",
     "Australian Indian Ocean Territories": "Christmas Island and Cocos Islands",
@@ -42,7 +90,7 @@ const EXONYM_MAP = {
 
 // This dataset is from https://www.naturalearthdata.com/
 const COUNTRIES_GEOJSON_PROMISE = (async () => {
-    const geojson = (await import("./ne_10m_admin_0_countries.json")).default;
+    const geojson = (await import("./ne_10m_admin_0_map_units.json")).default;
     const allCombinedCountryNames = [];
     const combinedCountries = COUNTRIES_TO_COMBINE.map(
         ({ parentCountryName, countryNames }) => {
@@ -97,6 +145,9 @@ const COUNTRIES_PROMISE = (async () => {
                 console.warn(`Could not find endonyms for ${exonym}`);
             }
             endonyms = endonyms.filter((endonym) => endonym !== exonym);
+            if (exonym === "France") {
+                console.log("geojson", geojson);
+            }
             const countryFormatted = {
                 name: exonym,
                 endonyms,
