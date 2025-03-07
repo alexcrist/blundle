@@ -145,9 +145,6 @@ const COUNTRIES_PROMISE = (async () => {
                 console.warn(`Could not find endonyms for ${exonym}`);
             }
             endonyms = endonyms.filter((endonym) => endonym !== exonym);
-            if (exonym === "France") {
-                console.log("geojson", geojson);
-            }
             const countryFormatted = {
                 name: exonym,
                 endonyms,
