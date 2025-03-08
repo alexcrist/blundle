@@ -1,4 +1,4 @@
-# Blundle
+# <img src="web-frontend/public/dance.gif"> Blundle <img src="web-frontend/public/dance.gif">
 
 > A country guessing game
 
@@ -6,18 +6,18 @@ https://blundle.com
 
 https://github.com/user-attachments/assets/ccbb49ff-6547-4dd9-a8f7-a06a6041e3cc
 
-### Attributions
+## Attributions
 
 -   Country data: https://www.naturalearthdata.com/
 
-### Key technologies
+## Key technologies
 
 * React
 * Redux
 * Vite
 * MapLibre
 
-### Running locally
+## Running locally
 
 **Requirements**
 
@@ -33,6 +33,6 @@ https://github.com/user-attachments/assets/ccbb49ff-6547-4dd9-a8f7-a06a6041e3cc
 5. `npm install`
 6. `npm run dev`
 
-### Future ideas
+## Future ideas
 
 -   Add win streak feature
